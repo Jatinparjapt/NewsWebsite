@@ -1,12 +1,13 @@
 const express = require("express")
 const route = express.Router();
 const axios = require("axios")
+const Authcation = require("../authication/auth")
 const bcrypt = require("bcryptjs")
 const NewsData = require("../mongoose/dataSchema")
 const schema = require("../mongoose/schema")
 require("../mongoose/connection")
-route.get("/", async (req ,res )=>{
-    res.send("home page ")
+// route.get("/", async (req ,res )=>{
+//     res.send("home page ")
     // const data = await NewsData.find({});
     // res.json({data})
     // async function getData(){
@@ -51,7 +52,7 @@ route.get("/", async (req ,res )=>{
     // }
 //     getData()
 //     res.send("data is here")
-})
+// })
 route.post("/singup", async (req ,res )=>{
     const {name, email, password} = req.body;
     if(!name || !email || !password){
@@ -107,6 +108,21 @@ route.post("/sigin" , async (req,res)=>{
  console.log(err)
 }
 })
+route.post("/hireme", Authcation , async (req, res) => {
+    const {name ,email ,message} = req.body;
+    if(!name || !email || !message){
+        res.status(401).send({"Error" : "fill some data to send message"})
+    }
+    const userContect = await singup.findOne({_id :req.userId})
+    if(userContect){
+        const userMeassage = await userContect.addMessage(name ,email , message);
+        await userContect.save();
+        res.status(201).send ({response : "Data send successfully"})
+    }
+    else{
+        res.status(404).send({Error: "no data found"})
+    }
+  });
 route.get("/logout", (req,res)=>{
     res.clearCookie("jwtoken")
     res.send("Logout")
