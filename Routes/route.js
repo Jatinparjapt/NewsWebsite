@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs")
 const NewsData = require("../mongoose/dataSchema")
 const schema = require("../mongoose/schema")
 require("../mongoose/connection")
-// route.get("/", async (req ,res )=>{
+route.get("/news", async (req ,res )=>{
 //     res.send("home page ")
     // const data = await NewsData.find({});
     // res.json({data})
@@ -52,11 +52,11 @@ require("../mongoose/connection")
     // }
 //     getData()
 //     res.send("data is here")
-// })
+})
 route.post("/singup", async (req ,res )=>{
     const {name, email, password} = req.body;
     if(!name || !email || !password){
-        return res.json({
+        return res.status(401).json({
             error : "please fill all the fields"
         })
     }
