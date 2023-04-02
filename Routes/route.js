@@ -1,73 +1,91 @@
 const express = require("express")
 const route = express.Router();
 const axios = require("axios")
+const mongodb = require("mongoose")
 const Authcation = require("../authication/auth")
 const bcrypt = require("bcryptjs")
 const NewsData = require("../mongoose/dataSchema")
 const schema = require("../mongoose/schema")
 require("../mongoose/connection")
+let topSearch
+const date = new Date()
+  const timeInHours = date.getHours()
+  if(timeInHours===0 ||timeInHours <=10 ){
+    topSearch = "technology"
+  }
+  else if(timeInHours===10 || timeInHours <= 14){
+    topSearch = "business"
+  }
+  else if(timeInHours===14 || timeInHours<=17){
+    topSearch = "entertainment"
+  }
+  else if(timeInHours===17 || timeInHours<=22){
+    topSearch = "sports"
+  }
+  else if(timeInHours===22 || timeInHours <= 23){
+    topSearch = "india"
+  }
+    const getData = async ()=>{
+      const options = {
+        method: 'GET',
+        url: 'https://api.newscatcherapi.com/v2/search',
+        params: {q: `${topSearch}`, lang: 'en', sort_by: 'relevancy', page: '50'},
+        headers: {
+          'x-api-key': '1BlH9t_DVlQm8jsEqeKLqN_C-88KguzREBWxlS4hAqU'
+        }
+      };
+          const response = await axios.get(options)
+            const valu = response.data.value
+            for (let i=0;i<valu.length;i++){
+                console.log(valu[i]["id"])
+            const data = new NewsData ({
+                id:valu[i]["_id"],
+                media : valu[i]["media"],
+                title:valu[i]["title"],
+                excerpt : valu[i]["excerpt"],
+                summary: valu[i]["summary"],
+                link : valu[i]["link"]
+            })
+            const date = new Date()
+            const timeInHours = date.getHours()
+            const timeInMinutes = date.getMinutes() 
+            if(timeInHours=== 0 &&timeInMinutes === 0  ){
+                 getData()
+                 await data.save()
+            }
+             else if(timeInHours === 10 && timeInMinutes === 0  ){
+              getData()  
+                 await data.save()
+            }
+            else if(timeInHours ===14 &&timeInMinutes === 0  ){
+              getData()
+                 await data.save()
+            }
+            else if(timeInHours=== 17  &&timeInMinutes === 0 ){
+              getData()
+                 await data.save()
+            }
+            else if(timeInHours === 22 &&timeInMinutes === 0 ){
+              getData()
+                 await data.save()
+            }
+        }}
+    
 route.get("/news", async (req ,res )=>{
-//     res.send("home page ")
-    // const data = await NewsData.find({});
-    // res.json({data})
-    // async function getData(){
-    //     const options = {
-    //         method: 'GET',
-    //         url: 'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/search/NewsSearchAPI',
-    //         params: {
-    //           q: 'business',
-    //           pageNumber: '1',
-    //           pageSize: '50',
-    //           autoCorrect: 'true',
-    //           fromPublishedDate: 'null',
-    //           toPublishedDate: 'null'
-    //         },
-    //         headers: {
-    //           'X-RapidAPI-Key': '89408d746emsh8b8da6d3c6323e3p1f4addjsn7ec08c5a56c7',
-    //           'X-RapidAPI-Host': 'contextualwebsearch-websearch-v1.p.rapidapi.com'
-    //         }
-    //       };
-    //       axios.request(options).then(function (response) {
-    //         const valu = response.data.value
-    //         // console.log(valu.id)
-    //         for (let i=0;i<valu.length;i++){
-    //             console.log(valu[i]["id"])
-    //         const data = new NewsData ({
-    //             id:valu[i]["id"],
-    //             image : valu[i]["image"]["url"],
-    //             title:valu[i]["title"],
-    //             body : valu[i]["body"],
-    //             description: valu[i]["description"],
-    //             url : valu[i]["url"]
-    //         })
-    //         data.save().then(()=>{console
-    //         .log("dataSaved")}).catch((error)=>{console.log(error)})
-    //     }
-    //         // for (let i=0; i<value.length;i++){
-    //         //     console.log(value.id)
-    //         // }
-    //       }).catch(function (error) {
-    //         console.error(error);
-    //       });
-    // }
-//     getData()
-//     res.send("data is here")
+    const data = await NewsData.find({});
+    res.json({data})
 })
 route.post("/singup", async (req ,res )=>{
     const {name, email, password} = req.body;
     if(!name || !email || !password){
         return res.status(401).json({
             error : "please fill all the fields"
-        })
-    }
+        }) }
     try {
         const userExist = await schema.findOne({email:email});
         if(userExist){
             res.status(422).json({error : "User exist"})
         }
-        // console.log("User exist",userExist)
-        // window.alert("Already Exist");
-        // window.location.href = "/login"
         const user = new schema({name ,email , password})
         const userR = await user.save();
         if(userR){

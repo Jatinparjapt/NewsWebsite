@@ -6,6 +6,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 require("./mongoose/connection")
+
 app.use(require("./Routes/route"))
 const PORT = process.env.PORT || 5000;
 
