@@ -73,7 +73,7 @@ const date = new Date()
     
 route.get("/news", async (req ,res )=>{
     const data = await NewsData.find({});
-    res.json({data})
+    res.json("{data}")
 })
 route.post("/singup", async (req ,res )=>{
     const {name, email, password} = req.body;
