@@ -1,79 +1,54 @@
 const express = require("express")
 const route = express.Router();
 const axios = require("axios")
-const mongodb = require("mongoose")
 const Authcation = require("../authication/auth")
 const bcrypt = require("bcryptjs")
 const NewsData = require("../mongoose/dataSchema")
 const schema = require("../mongoose/schema")
-require("../mongoose/connection")
-let topSearch
-const date = new Date()
-  const timeInHours = date.getHours()
-  if(timeInHours===0 ||timeInHours <=10 ){
-    topSearch = "technology"
-  }
-  else if(timeInHours===10 || timeInHours <= 14){
-    topSearch = "business"
-  }
-  else if(timeInHours===14 || timeInHours<=17){
-    topSearch = "entertainment"
-  }
-  else if(timeInHours===17 || timeInHours<=22){
-    topSearch = "sports"
-  }
-  else if(timeInHours===22 || timeInHours <= 23){
-    topSearch = "india"
-  }
-    const getData = async ()=>{
-      const options = {
-        method: 'GET',
-        url: 'https://api.newscatcherapi.com/v2/search',
-        params: {q: `${topSearch}`, lang: 'en', sort_by: 'relevancy', page: '50'},
-        headers: {
-          'x-api-key': '1BlH9t_DVlQm8jsEqeKLqN_C-88KguzREBWxlS4hAqU'
-        }
-      };
-          const response = await axios.get(options)
-            const valu = response.data.value
-            for (let i=0;i<valu.length;i++){
-                console.log(valu[i]["id"])
-            const data = new NewsData ({
-                id:valu[i]["_id"],
-                media : valu[i]["media"],
-                title:valu[i]["title"],
-                excerpt : valu[i]["excerpt"],
-                summary: valu[i]["summary"],
-                link : valu[i]["link"]
-            })
-            const date = new Date()
-            const timeInHours = date.getHours()
-            const timeInMinutes = date.getMinutes() 
-            if(timeInHours=== 0 &&timeInMinutes === 0  ){
-                 getData()
-                 await data.save()
-            }
-             else if(timeInHours === 10 && timeInMinutes === 0  ){
-              getData()  
-                 await data.save()
-            }
-            else if(timeInHours ===14 &&timeInMinutes === 0  ){
-              getData()
-                 await data.save()
-            }
-            else if(timeInHours=== 17  &&timeInMinutes === 0 ){
-              getData()
-                 await data.save()
-            }
-            else if(timeInHours === 22 &&timeInMinutes === 0 ){
-              getData()
-                 await data.save()
-            }
-        }}
+
+// 1 .technology , business, entertainment , sport , india ,
     
 route.get("/news", async (req ,res )=>{
+    // const options = {
+        // method: 'GET',
+        // url: 'https://bing-news-search1.p.rapidapi.com/news',
+        // params: {
+        //     q: 'technology',
+        //     count: '12',
+        //     freshness: 'Day',
+        //     textFormat: 'Raw',
+        //     safeSearch: 'Off'
+        //   },
+        // headers: {
+        //   'X-BingApis-SDK': 'true',
+        //   'X-RapidAPI-Key': '9843848a02msh5b2a4156d1cfad6p1b0be4jsn59264fd09150',
+        //   'X-RapidAPI-Host': 'bing-news-search1.p.rapidapi.com'
+        // }
+    //   };
+      
+      
+//       axios.request(options).then(function (response) {
+//           console.log(response.data.news.news);
+//       const getData = async ()=>{
+//         const valu = response.data.value
+//         for (let i=0;i<valu.length;i++){
+//         const data = new NewsData ({
+//             image : valu[i]["image"]["thumbnail"]["contentUrl"],
+//             title:valu[i]["name"],
+//             source : valu[i]["_type"],
+//             description: valu[i]["description"],
+//             link : valu[i]["url"]
+//         })
+//          const add =   await data.save() 
+//          console.log(add , "add to database")    
+//     }}
+//      getData();
+// }).catch(function (error) {
+// 	console.error(error);
+// });
+      
     const data = await NewsData.find({});
-    res.status(200).json({"data": data});
+    res.status(200).json({data});
 })
 route.post("/singup", async (req ,res )=>{
     const {name, email, password} = req.body;
