@@ -63,6 +63,17 @@ route.delete("/api/deleteQuestion " , async (req ,res )=>{
 route.put("/api/updateQuestion " , async (req ,res )=>{
     try {
         
+         
+            res.status(200).json({ data: "home pages " });
+          
+        } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal error occurred" });
+      }
+}) 
+route.put("/api/updateQuestion " , async (req ,res )=>{
+    try {
+        
           if (!req.body.data.question && !req.body.data.id) {
             res.status(404).json({ error: "Data not found to update" });
           } else {
