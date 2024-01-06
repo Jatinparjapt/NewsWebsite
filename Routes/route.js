@@ -60,7 +60,7 @@ route.delete("/api/deleteQuestion " , async (req ,res )=>{
         res.status(500).json({ error: "Internal error occurred" });
       }
 }) 
-route.put("/api/updateQuestion " , async (req ,res )=>{
+route.get("/" , async (req ,res )=>{
     try {
         
          
