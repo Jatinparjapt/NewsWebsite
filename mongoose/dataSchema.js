@@ -25,24 +25,6 @@ const Data = new mongoose.Schema({
             require : true,
         }
 })
-// const date = new Date()
-//   const timeInHours = date.getHours()
-//   let topSearch;
-  //  if(timeInHours<=10){
-  //   topSearch = "Technology_News_Data"
-  // }
-  // else if(timeInHours <= 14){
-  //   topSearch = "Business_News_Data"
-  // }
-  // else if(timeInHours<=17){
-  //   topSearch = "Entertainment_News_Data"
-  // }
-  // else if(timeInHours<=22){
-  //   topSearch = "Sports_News_Data"
-  // }
-  // else if(timeInHours <= 23){
-  //   topSearch = "India_News_Data"
-  // }
 const New_News_Data = new mongoose.model(`all_news_data`,Data)
 module.exports = New_News_Data
 

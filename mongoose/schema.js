@@ -38,6 +38,22 @@ const Singup = new mongoose.Schema({
 
         }
     ],
+    paymentDetails : [
+        {
+            paymentid:{
+                type : String,
+                require : true
+            },
+            orderid:{
+                type : String,
+                require : true
+            },
+            signature :{
+                type : String,
+                require : true
+                }
+        }
+    ],
     fulladdress :[{
         name : {
             type:String,
