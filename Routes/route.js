@@ -47,7 +47,7 @@ route.post("/api/addQuestions", async (req ,res )=>{
     }
 
 })
-route.get("/api/deleteQuestion " , async (req ,res )=>{
+route.delete("/api/deleteQuestion " , async (req ,res )=>{
     try {
         if(req.body){
             await questionSchema.findOneAndDelete({_id:req.body})
@@ -60,7 +60,7 @@ route.get("/api/deleteQuestion " , async (req ,res )=>{
         res.status(500).json({ error: "Internal error occurred" });
       }
 }) 
-route.get("/api/updateQuestion " , async (req ,res )=>{
+route.put("/api/updateQuestion " , async (req ,res )=>{
     try {
         
           if (!req.body.data.question && !req.body.data.id) {
