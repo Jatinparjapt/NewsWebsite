@@ -48,10 +48,10 @@ route.post("/api/addQuestions", async (req ,res )=>{
 
 })
 route.delete("/api/deleteQuestion " , async (req ,res )=>{
-    console.log(req.body.data)
+    console.log(req.body.id)
     try {
-        if(req.body){
-            await questionSchema.findOneAndDelete({_id:req.body})
+        if(req.body.id){
+            await questionSchema.findOneAndDelete({_id:req.body.id})
             res.status(200).json({ data: "One Question Deleted" });   
         }else{
             res.status(404).json({ error: "Data not found to delete" });
@@ -72,25 +72,23 @@ route.get("/" , async (req ,res )=>{
         res.status(500).json({ error: "Internal error occurred" });
       }
 }) 
-route.put("/api/updateQuestion " , async (req ,res )=>{
-    console.log(req.body)
+route.put("/api/updateQuestion:id " , async (req ,res )=>{
+    console.log(req.body.question , req.params.id , "from put method")
+    try {
+              if (!req.body.question && !req.params.id) {
+                    res.status(404).json({ error: "Data not found to update" });
+                  } else {
+                        console.log(req.body.data.question,req.body.data.id, "database");
+                        const data = await questionSchema.findOneAndUpdate(
+                              { _id: req.params.id },
+              { question: req.body.question }
+            );
     res.status(201).json({ data: "One Question update" });
-    
-    // try {
-        
-    //       if (!req.body.data.question && !req.body.data.id) {
-    //         res.status(404).json({ error: "Data not found to update" });
-    //       } else {
-    //         console.log(req.body.data.question,req.body.data.id, "database");
-    //         const data = await questionSchema.findOneAndUpdate(
-    //           { _id: req.body.data.id },
-    //           { question: req.body.data.question }
-    //         );
-    //       }
-    //     } catch (error) {
-    //     console.error(error);
-    //     res.status(500).json({ error: "Internal error occurred" });
-    //   }
+          }
+        } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal error occurred" });
+      }
 }) 
 route.get("/news", async (req ,res )=>{
 //     const options = {
