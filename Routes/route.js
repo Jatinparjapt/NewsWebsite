@@ -48,6 +48,7 @@ route.post("/api/addQuestions", async (req ,res )=>{
 
 })
 route.delete("/api/deleteQuestion " , async (req ,res )=>{
+    console.log(req.body.data)
     try {
         if(req.body){
             await questionSchema.findOneAndDelete({_id:req.body})
@@ -72,22 +73,24 @@ route.get("/" , async (req ,res )=>{
       }
 }) 
 route.put("/api/updateQuestion " , async (req ,res )=>{
-    try {
+    console.log(req.body)
+    res.status(201).json({ data: "One Question update" });
+    
+    // try {
         
-          if (!req.body.data.question && !req.body.data.id) {
-            res.status(404).json({ error: "Data not found to update" });
-          } else {
-            console.log(req.body.data.question,req.body.data.id, "database");
-            const data = await questionSchema.findOneAndUpdate(
-              { _id: req.body.data.id },
-              { question: req.body.data.question }
-            );
-            res.status(201).json({ data: "One Question update" });
-          }
-        } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal error occurred" });
-      }
+    //       if (!req.body.data.question && !req.body.data.id) {
+    //         res.status(404).json({ error: "Data not found to update" });
+    //       } else {
+    //         console.log(req.body.data.question,req.body.data.id, "database");
+    //         const data = await questionSchema.findOneAndUpdate(
+    //           { _id: req.body.data.id },
+    //           { question: req.body.data.question }
+    //         );
+    //       }
+    //     } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ error: "Internal error occurred" });
+    //   }
 }) 
 route.get("/news", async (req ,res )=>{
 //     const options = {
