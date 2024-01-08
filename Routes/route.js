@@ -82,16 +82,22 @@ route.get("/", async (req, res) => {
 route.put("/api/updateQuestion", async (req, res) => {
   try {
     const { question, id } = req.body;
+    console.log(question ,id , "from update")
     if (!question && !id) {
       res.status(404).json({ error: "Data not found to update" });
-    } else {
+    } 
       // console.log(question,id, "database");
-      await questionSchema.findOneAndUpdate(
-        { _id: req.params.id },
-        { question: question }
+     const data = await questionSchema.findOneAndUpdate(
+        { _id: id },
+        { question: question },
+        {new : true}
       );
-      res.status(201).json({ data: "One Question update" });
+      if (data) {
+        return res.status(200).json({ data: data, message: "Question updated successfully" });
+    } else {
+        return res.status(404).json({ error: "Question not found" });
     }
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal error occurred" });
