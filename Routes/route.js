@@ -31,7 +31,7 @@ route.post("/api/addQuestions", async (req, res) => {
     if (
       !questionType ||
       !category ||
-      !description ||
+      !description || 
       !question ||
       !option1 ||
       !option2 ||
